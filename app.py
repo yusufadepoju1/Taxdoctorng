@@ -13,7 +13,7 @@ load_dotenv()
 
 @app.route('/')
 def index():
-    return render_template('index.html')  
+    return render_template('index.html') 
 
 @app.route('/upload', methods=['POST'])
 def upload_pdf():
@@ -27,7 +27,7 @@ def upload_pdf():
     filepath = os.path.join(UPLOAD_FOLDER, filename)
     file.save(filepath)
 
-    # Extract text and tables from PDF
+    
     data = []
     with pdfplumber.open(filepath) as pdf:
         for page in pdf.pages:
@@ -39,18 +39,18 @@ def upload_pdf():
             else:
                 lines = page.extract_text().split('\n')
                 for line in lines:
-                    data.append([line])  # wrap in list to keep CSV structure
+                    data.append([line])  
 
-    # Convert to DataFrame and save as CSV
+    
     df = pd.DataFrame(data)
     csv_file = os.path.join(UPLOAD_FOLDER, filename.replace(".pdf", ".csv"))
     df.to_csv(csv_file, index=False, header=False)
 
     return send_file(csv_file, as_attachment=True)
 
-
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000)) 
-    app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(debug=True, port=5000)
 
+
+    
 
