@@ -13,7 +13,7 @@ load_dotenv()
 
 @app.route('/')
 def index():
-    return render_template('index.html')  # This template should have a file upload form
+    return render_template('index.html')  
 
 @app.route('/upload', methods=['POST'])
 def upload_pdf():
@@ -48,5 +48,9 @@ def upload_pdf():
 
     return send_file(csv_file, as_attachment=True)
 
+
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    port = int(os.environ.get('PORT', 5000)) 
+    app.run(host='0.0.0.0', port=port, debug=True)
+
+
